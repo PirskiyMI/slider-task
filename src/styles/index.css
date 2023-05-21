@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+* {
+   padding: 0;
+   margin: 0;
+   border: 0;
+}
+*,
+*:before,
+*:after {
+   -moz-box-sizing: border-box;
+   -webkit-box-sizing: border-box;
+   box-sizing: border-box;
+}
+:focus,
+:active {
+   outline: none;
+}
+a:focus,
+a:active {
+   outline: none;
+}
+nav,
+footer,
+header,
+aside {
+   display: block;
+}
+html,
+body {
+   height: 100%;
+   width: 100%;
+   font-style: 100%;
+   line-height: 1;
+   font-style: 14px;
+   -ms-text-size-adjust: 100%;
+   -moz-text-size-adjust: 100%;
+   -webkit-text-size-adjust: 100%;
+}
+input,
+button,
+textarea {
+   font-family: inherit;
+}
+input::-ms-clear {
+   display: none;
+}
+button {
+   cursor: pointer;
+}
+button::-moz-focus-inner {
+   padding: 0;
+   border: 0;
+}
+a {
+   color: inherit;
+}
+a,
+a:visited {
+   text-decoration: none;
+}
+a:hover {
+   text-decoration: none;
+}
+ul li {
+   list-style-type: none;
+}
+img {
+   vertical-align: top;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   font-style: inherit;
+   font-weight: inherit;
+}
+.wrapper {
+   width: 100vw;
+   height: 100vh;
+   overflow: hidden;
+}
+._container {
+   margin: 0 auto;
+   padding: 0 15px;
+   max-width: 1190px;
+}
+:root {
+   /* colors */
+   --color-main: #527ccd;
+   --color-secondary: #ccddff;
+
+   /* font-size */
+   --fs-small: 12px;
+   --fs-medium: 16px;
+   --fs-big: 50px;
+
+   /* fot-weight */
+   --fw-normal: 400;
+   --fw-bold: 700;
+
+   /* line-height */
+   --lh-text: 183%;
+   --lh-subtitle: 162%;
+   --lh-title: 120%;
+
+   /* fonts */
+   --ff-main: 'Roboto', sans-serif;
+}
+
+body {
+   font-family: var(--ff-main);
+   color: var(--color-main);
+   font-size: var(--fs-small);
+   font-weight: var(--fw-normal);
+   line-height: var(--lh-text);
+}
