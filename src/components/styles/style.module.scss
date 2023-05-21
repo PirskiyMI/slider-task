@@ -4,6 +4,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
    }
    &_title {
       font-size: var(--fs-big);
@@ -11,17 +13,33 @@
       font-weight: var(--fw-bold);
    }
    &_buttons {
+      flex: 0 1 560px;
       display: flex;
+      align-items: center;
       gap: 40px;
    }
+   &_scroll {
+      flex: 0 1 360px;
+      height: 1px;
+      background-color: var(--color-secondary);
+      position: relative;
+      &__active{
+         position: absolute;
+         top: 0;
+         left: 0;
+         height: 100%;
+         background-color: var(--color-main);
+      }
+   }
    &_button {
-      width: 60px;
+      min-width: 60px;
       height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 1px solid var(--color-secondary);
       cursor: pointer;
+      user-select: none;
       transition: background-color ease 0.2s;
       &:hover {
          background-color: var(--color-secondary);
@@ -32,9 +50,12 @@
    }
    &_wrapper {
       width: 100%;
+      overflow: hidden;
+   }
+   &_body {
       display: flex;
       column-gap: 40px;
-      overflow: hidden;
+      transition: transform ease 0.2s;
    }
    &_item {
       max-width: 260px;
@@ -44,7 +65,7 @@
       gap: 10px;
       border: 1px solid var(--color-secondary);
       transition: border-color ease 0.2s;
-      &:hover{
+      &:hover {
          border-color: var(--color-main);
       }
    }
@@ -53,6 +74,7 @@
    &_date {
    }
    &_label {
+      font-size: var(--fs-medium);
    }
    &_description {
    }
