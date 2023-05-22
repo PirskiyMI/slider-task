@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
 import styles from './styles/style.module.scss';
+
 import PREV_ARROW from './../assets/img/arrow-left-icon.svg';
 import NEXT_ARROW from './../assets/img/arrow-right-icon.svg';
+
+import { useEffect, useRef, useState } from 'react';
 
 export const SliderControls = ({
    slideCount,
@@ -23,36 +25,40 @@ export const SliderControls = ({
       setScrollActiveWidth((prev) => {
          return (prev = scrollActiveRef.current.getBoundingClientRect().width);
       });
-      console.log(123);
    });
 
    let scrollingLength;
+   let gapWidth;
 
    if (windowWidth >= 580) {
       scrollingLength = 300;
+      gapWidth = 40;
    } else {
       scrollingLength = 290;
+      gapWidth = 10;
    }
 
    const nextSlideHandler = () => {
-      slidePosition <= -(sliderItemsWidth - sliderWrapperWidth)
+      console.log(sliderItemsWidth - sliderWrapperWidth);
+      slidePosition <= -(sliderItemsWidth - sliderWrapperWidth - gapWidth)
          ? setSlidePosition((prev) => (prev = 0))
          : setSlidePosition((prev) => {
-              const scrollSlideLeft =
-                 sliderItemsWidth - (Math.abs(slidePosition) + sliderWrapperWidth);
-              return scrollSlideLeft >= scrollingLength
-                 ? (prev -= scrollingLength)
-                 : (prev -= scrollSlideLeft);
+              const slideLeft = sliderItemsWidth - (Math.abs(slidePosition) + sliderWrapperWidth);
+              return slideLeft >= scrollingLength ? (prev -= scrollingLength) : (prev -= slideLeft);
            });
-           console.log(scrollWidth - scrollActiveWidth);
       scrollPosition >= scrollWidth - scrollActiveWidth
          ? setScrollPosition((prev) => (prev = 0))
-         : setScrollPosition((prev) => (prev += scrollActiveWidth));
+         : setScrollPosition((prev) => {
+              const scrollLeft = scrollWidth - (scrollPosition + scrollActiveWidth);
+              return scrollLeft >= scrollActiveWidth
+                 ? (prev += scrollActiveWidth)
+                 : (prev += scrollLeft);
+           });
    };
 
    const prevSlideHandler = () => {
       slidePosition >= 0
-         ? setSlidePosition((prev) => (prev = -(sliderItemsWidth - sliderWrapperWidth)))
+         ? setSlidePosition((prev) => (prev = -(sliderItemsWidth - sliderWrapperWidth - gapWidth)))
          : setSlidePosition((prev) => {
               const scrollSliderLeft = Math.abs(slidePosition);
               return scrollSliderLeft >= scrollingLength
@@ -70,14 +76,14 @@ export const SliderControls = ({
          timeOut = setTimeout(tick, 4000);
       }, 4000);
       return () => clearTimeout(timeOut);
-   }, [ ,scrollPosition]);
+   }, [slideCount, scrollPosition]);
 
    return (
       <div className={styles.slider_controls}>
          <div className={styles.slider_scroll} ref={scrollRef}>
             <div
                className={styles.slider_scroll__active}
-               style={{ width: 100 / (slideCount + 1) + '%', left: scrollPosition + 'px' }}
+               style={{ width: 100 / (slideCount + 0.5) + '%', left: scrollPosition + 'px' }}
                ref={scrollActiveRef}></div>
          </div>
          <div className={styles.slider_button} onClick={prevSlideHandler}>

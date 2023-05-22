@@ -39,12 +39,19 @@ export const Slider = () => {
          title: 'Ким и Валерия Брейтбурги написали книгу про искусство',
          text: 'Работа над книгой велась более пяти лет, и действенные методики, описанные в ней, созданные в результате анализа и синтеза идей…',
       },
+      {
+         id: 6,
+         date: '10.11.2020 г.',
+         title: 'Юрий Колокольников пытается спасти Землю в клипе «Космические силы»',
+         text: 'Премьера клипа «Космические силы» группы «Мумий Тролль» состоялась 6 ноября 2020 года.',
+      },
    ]);
 
    const [sliderItemsWidth, setSliderItemsWidth] = useState(0);
    const [slideCount, setSlideCount] = useState(0);
    const [slidePosition, setSlidePosition] = useState(0);
    const [sliderWrapperWidth, setSliderWrapperWidth] = useState(0);
+
    const [minusSlide, setMinusSlide] = useState(0);
    const sliderWrapperRef = useRef(null);
 

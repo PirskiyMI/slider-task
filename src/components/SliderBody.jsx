@@ -12,18 +12,10 @@ export const SliderBody = ({
    windowWidth,
 }) => {
    useEffect(() => {
-      setSlideCount(prev => prev = children.length - minusSlideCount);
+      setSlideCount((prev) => (prev = children.length - minusSlideCount));
    });
    useEffect(() => {
-      setSliderItemsWidth((prev) => {
-         if (sliderItemWidth) {
-            return (prev = children.length * (windowWidth >= 580 ? 300 : 290));
-         } else if (windowWidth >= 580) {
-            return (prev = 1460);
-         } else {
-            return (prev = 1440);
-         }
-      });
+      setSliderItemsWidth((prev) => (prev = children.length * (windowWidth >= 580 ? 300 : 290)));
    }, [windowWidth]);
 
    return (

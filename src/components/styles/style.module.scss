@@ -1,5 +1,8 @@
 .slider {
    padding: 120px 0 160px;
+   @media (max-width: 580px) {
+      padding: 130px 0 87px;
+   }
    &_top {
       display: flex;
       justify-content: space-between;
