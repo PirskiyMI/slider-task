@@ -9,17 +9,30 @@ export const SliderControls = ({
    slidePosition,
    sliderWrapperWidth,
    sliderItemsWidth,
+   windowWidth,
 }) => {
    const [scrollPosition, setScrollPosition] = useState(0);
    const [scrollWidth, setScrollWidth] = useState(0);
    const [scrollActiveWidth, setScrollActiveWidth] = useState(0);
 
    const scrollRef = useRef(null);
+   const scrollActiveRef = useRef(null);
 
    useEffect(() => {
       setScrollWidth(scrollRef.current.getBoundingClientRect().width);
-      setScrollActiveWidth(scrollWidth / Math.ceil(slideCount));
+      setScrollActiveWidth((prev) => {
+         return (prev = scrollActiveRef.current.getBoundingClientRect().width);
+      });
+      console.log(123);
    });
+
+   let scrollingLength;
+
+   if (windowWidth >= 580) {
+      scrollingLength = 300;
+   } else {
+      scrollingLength = 290;
+   }
 
    const nextSlideHandler = () => {
       slidePosition <= -(sliderItemsWidth - sliderWrapperWidth)
@@ -27,8 +40,11 @@ export const SliderControls = ({
          : setSlidePosition((prev) => {
               const scrollSlideLeft =
                  sliderItemsWidth - (Math.abs(slidePosition) + sliderWrapperWidth);
-              return scrollSlideLeft >= 300 ? (prev -= 300) : (prev -= scrollSlideLeft);
+              return scrollSlideLeft >= scrollingLength
+                 ? (prev -= scrollingLength)
+                 : (prev -= scrollSlideLeft);
            });
+           console.log(scrollWidth - scrollActiveWidth);
       scrollPosition >= scrollWidth - scrollActiveWidth
          ? setScrollPosition((prev) => (prev = 0))
          : setScrollPosition((prev) => (prev += scrollActiveWidth));
@@ -39,27 +55,30 @@ export const SliderControls = ({
          ? setSlidePosition((prev) => (prev = -(sliderItemsWidth - sliderWrapperWidth)))
          : setSlidePosition((prev) => {
               const scrollSliderLeft = Math.abs(slidePosition);
-              return scrollSliderLeft >= 300 ? (prev += 300) : (prev += scrollSliderLeft);
+              return scrollSliderLeft >= scrollingLength
+                 ? (prev += scrollingLength)
+                 : (prev += scrollSliderLeft);
            });
       scrollPosition <= 0
          ? setScrollPosition((prev) => (prev = scrollWidth - scrollActiveWidth))
          : setScrollPosition((prev) => (prev -= scrollActiveWidth));
    };
 
-   // useEffect(() => {
-   //    let timeOut = setTimeout(function tick() {
-   //       nextSlideHandler();
-   //       timeOut = setTimeout(tick, 4000);
-   //    }, 4000);
-   //    return () => clearTimeout(timeOut);
-   // }, [slideCount, scrollPosition]);
+   useEffect(() => {
+      let timeOut = setTimeout(function tick() {
+         nextSlideHandler();
+         timeOut = setTimeout(tick, 4000);
+      }, 4000);
+      return () => clearTimeout(timeOut);
+   }, [ ,scrollPosition]);
 
    return (
       <div className={styles.slider_controls}>
          <div className={styles.slider_scroll} ref={scrollRef}>
             <div
                className={styles.slider_scroll__active}
-               style={{ width: 100 / slideCount + '%', left: scrollPosition + 'px' }}></div>
+               style={{ width: 100 / (slideCount + 1) + '%', left: scrollPosition + 'px' }}
+               ref={scrollActiveRef}></div>
          </div>
          <div className={styles.slider_button} onClick={prevSlideHandler}>
             <img src={PREV_ARROW} alt="Прокрутка слайдера назад" />

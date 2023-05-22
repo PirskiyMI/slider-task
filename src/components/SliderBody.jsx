@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import styles from './styles/style.module.scss';
+import { useResize } from '../hooks/useResize';
 
 export const SliderBody = ({
    position,
@@ -7,23 +8,26 @@ export const SliderBody = ({
    setSlideCount,
    minusSlideCount,
    setSliderItemsWidth,
-   sliderItemsWidth,
+   sliderItemWidth,
+   windowWidth,
 }) => {
    useEffect(() => {
-      setSlideCount(children.length - minusSlideCount);
-   }, [sliderItemsWidth]);
-
+      setSlideCount(prev => prev = children.length - minusSlideCount);
+   });
    useEffect(() => {
-      setSliderItemsWidth(children.length * 300 - 40);
-   }, []);
-
-   const sliderBodyRef = useRef(null);
+      setSliderItemsWidth((prev) => {
+         if (sliderItemWidth) {
+            return (prev = children.length * (windowWidth >= 580 ? 300 : 290));
+         } else if (windowWidth >= 580) {
+            return (prev = 1460);
+         } else {
+            return (prev = 1440);
+         }
+      });
+   }, [windowWidth]);
 
    return (
-      <div
-         className={styles.slider_body}
-         style={{ transform: `translateX(${position}px)` }}
-         ref={sliderBodyRef}>
+      <div className={styles.slider_body} style={{ transform: `translateX(${position}px)` }}>
          {children}
       </div>
    );
