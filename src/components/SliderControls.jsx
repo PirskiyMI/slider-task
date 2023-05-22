@@ -76,7 +76,7 @@ export const SliderControls = ({
          timeOut = setTimeout(tick, 4000);
       }, 4000);
       return () => clearTimeout(timeOut);
-   }, [slideCount, scrollPosition]);
+   });
 
    return (
       <div className={styles.slider_controls}>
