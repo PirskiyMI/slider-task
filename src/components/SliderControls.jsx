@@ -39,7 +39,6 @@ export const SliderControls = ({
    }
 
    const nextSlideHandler = () => {
-      console.log(sliderItemsWidth - sliderWrapperWidth);
       slidePosition <= -(sliderItemsWidth - sliderWrapperWidth - gapWidth)
          ? setSlidePosition((prev) => (prev = 0))
          : setSlidePosition((prev) => {
@@ -67,7 +66,11 @@ export const SliderControls = ({
            });
       scrollPosition <= 0
          ? setScrollPosition((prev) => (prev = scrollWidth - scrollActiveWidth))
-         : setScrollPosition((prev) => (prev -= scrollActiveWidth));
+         : setScrollPosition((prev) => {
+              return scrollPosition >= scrollActiveWidth
+                 ? (prev -= scrollActiveWidth)
+                 : (prev -= scrollPosition);
+           });
    };
 
    useEffect(() => {
