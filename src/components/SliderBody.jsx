@@ -1,25 +1,26 @@
 import { useEffect } from 'react';
 import styles from './styles/style.module.scss';
-import { useResize } from '../hooks/useResize';
+import { useDispatch, useSelector } from 'react-redux';
+import { sliderSlice } from './../store/reducers/sliderReducer';
 
-export const SliderBody = ({
-   position,
-   children,
-   setSlideCount,
-   minusSlideCount,
-   setSliderItemsWidth,
-   sliderItemWidth,
-   windowWidth,
-}) => {
+export const SliderBody = ({ children, windowWidth }) => {
+   const { slidePosition, excessSlides } = useSelector((state) => state.sliderReducer);
+   const dispatch = useDispatch();
+
    useEffect(() => {
-      setSlideCount((prev) => (prev = children.length - minusSlideCount));
+      console.log(children.length - excessSlides);
+      dispatch(sliderSlice.actions.setSlideCount(children.length - excessSlides));
    });
    useEffect(() => {
-      setSliderItemsWidth((prev) => (prev = children.length * (windowWidth >= 580 ? 300 : 290)));
+      dispatch(
+         sliderSlice.actions.setSliderItemsWidth(
+            children.length * (windowWidth >= 580 ? 300 : 290),
+         ),
+      );
    }, [windowWidth]);
 
    return (
-      <div className={styles.slider_body} style={{ transform: `translateX(${position}px)` }}>
+      <div className={styles.slider_body} style={{ transform: `translateX(${slidePosition}px)` }}>
          {children}
       </div>
    );

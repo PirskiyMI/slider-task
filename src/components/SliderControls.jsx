@@ -4,15 +4,15 @@ import PREV_ARROW from './../assets/img/arrow-left-icon.svg';
 import NEXT_ARROW from './../assets/img/arrow-right-icon.svg';
 
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { sliderSlice } from './../store/reducers/sliderReducer';
 
-export const SliderControls = ({
-   slideCount,
-   setSlidePosition,
-   slidePosition,
-   sliderWrapperWidth,
-   sliderItemsWidth,
-   windowWidth,
-}) => {
+export const SliderControls = ({ windowWidth }) => {
+   const { sliderItemsWidth, sliderWrapperWidth, slidePosition, slideCount } = useSelector(
+      (state) => state.sliderReducer,
+   );
+   const dispatch = useDispatch();
+
    const [scrollPosition, setScrollPosition] = useState(0);
    const [scrollWidth, setScrollWidth] = useState(0);
    const [scrollActiveWidth, setScrollActiveWidth] = useState(0);
@@ -39,16 +39,19 @@ export const SliderControls = ({
    }
 
    const nextSlideHandler = () => {
+      const slideLeft = sliderItemsWidth - (Math.abs(slidePosition) + sliderWrapperWidth);
       slidePosition <= -(sliderItemsWidth - sliderWrapperWidth - gapWidth)
-         ? setSlidePosition((prev) => (prev = 0))
-         : setSlidePosition((prev) => {
-              const slideLeft = sliderItemsWidth - (Math.abs(slidePosition) + sliderWrapperWidth);
-              return slideLeft >= scrollingLength ? (prev -= scrollingLength) : (prev -= slideLeft);
-           });
+         ? dispatch(sliderSlice.actions.setSlidePosition(0))
+         : dispatch(
+              sliderSlice.actions.setSlidePosition(
+                 slideLeft >= scrollingLength ? -scrollingLength : -slideLeft,
+              ),
+           );
+
+      const scrollLeft = scrollWidth - (scrollPosition + scrollActiveWidth);
       scrollPosition >= scrollWidth - scrollActiveWidth
          ? setScrollPosition((prev) => (prev = 0))
          : setScrollPosition((prev) => {
-              const scrollLeft = scrollWidth - (scrollPosition + scrollActiveWidth);
               return scrollLeft >= scrollActiveWidth
                  ? (prev += scrollActiveWidth)
                  : (prev += scrollLeft);
@@ -56,14 +59,19 @@ export const SliderControls = ({
    };
 
    const prevSlideHandler = () => {
+      const slideLift = Math.abs(slidePosition);
       slidePosition >= 0
-         ? setSlidePosition((prev) => (prev = -(sliderItemsWidth - sliderWrapperWidth - gapWidth)))
-         : setSlidePosition((prev) => {
-              const scrollSliderLeft = Math.abs(slidePosition);
-              return scrollSliderLeft >= scrollingLength
-                 ? (prev += scrollingLength)
-                 : (prev += scrollSliderLeft);
-           });
+         ? dispatch(
+              sliderSlice.actions.setSlidePosition(
+                 -(sliderItemsWidth - sliderWrapperWidth - gapWidth),
+              ),
+           )
+         : dispatch(
+              sliderSlice.actions.setSlidePosition(
+                 slideLift >= scrollingLength ? scrollingLength : slideLift,
+              ),
+           );
+
       scrollPosition <= 0
          ? setScrollPosition((prev) => (prev = scrollWidth - scrollActiveWidth))
          : setScrollPosition((prev) => {
@@ -86,7 +94,10 @@ export const SliderControls = ({
          <div className={styles.slider_scroll} ref={scrollRef}>
             <div
                className={styles.slider_scroll__active}
-               style={{ width: 100 / (slideCount + 0.5) + '%', left: scrollPosition + 'px' }}
+               style={{
+                  width: 100 / `${windowWidth >= 1440 ? slideCount + 0.5 : slideCount + 1}` + '%',
+                  left: scrollPosition + 'px',
+               }}
                ref={scrollActiveRef}></div>
          </div>
          <div className={styles.slider_button} onClick={prevSlideHandler}>
